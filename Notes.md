@@ -1,3 +1,58 @@
+-- Docker is a platform for building, running and shipping applications 
+-- Solves the problem - "It works on myy machine" - Due to - One or more files missing - Software dependency (node, mongo, nginx etc...) or Kernel version mismatch 
+-- Runs the application inside an isolated environment called "Container" 
+-- A part of your application can run java 8 while another runs version 10 without messing with each other 
+-- If there is need to decommission a part of an application, we can easily do that without messing with the entire application 
+-- we can safely clean up our development machine with all the downloaded dependencies wihthout problems 
+-- Containers and Virtual Machines 
+    -- VM - abstration of a physical computer through a hypervisor (Virtualbox, VMWare) - Each machine needs an operating system that needs to be Licensed, Patched and maintanined (A lot of overhead) - slow to start - Resource Intensive (cpu, memory and disk space) 
+    
+    -- Containers - Same isolation like VM, but more lightweght - Needs only one Operating system that requires maintenance - Fast to load - Needs much less hardware resources 
+
+Docker Architecture -- CLient server architecture 
+  - Client talks to the Docker Engine which is the server 
+  - Docker engine sits in the background and takes care of running containers 
+    - containers are like special processes running on a computer 
+    - Containers are created from a template called Docker image 
+    - All the containers share the kernel of the Operating system 
+    - A kernel is the core software of the Operating system (the part of the Operating system that manages all the applications, and hardware resources like Memory and CPU)
+  
+Development Workflow 
+
+1. Package applications into a template called an "Image" using a Dockerfile 
+   -- Command - Docker build 
+   - An image contains 
+     1. A cut-down OS 
+     2. A runtime environment (java, node) 
+     3. Application files 
+     4. Third-party libraries 
+     5. Environment variables2. 
+   
+2. Push the image to a registry. Just like pushing your code to a git repository.
+3. Pull and Start a container using an image (Container is a special process running on the machine) 
+   - Docker run (Test to Production) - Run a simple image that is already published to Docker hub - hub.docker.com 
+4.  Create a Dockerfile to run a simple NodeJs application 
+   -- Template to build a dockerfile 
+       - Start with an OS 
+       - Install Node 
+       - Copy app files 
+       - Run the application file app.js 
+            FROM node:alpine 
+            COPY . /app 
+            WORKDIR /app 
+            CMD node app.js
+  -- Build the image 
+      build -t hello-docker .
+  -- See the image 
+    docker images or docker image ls 
+  -- Run the image as a container 
+    docker run hello-docker
+  -- Publish the image to docker hub 
+    Docker push dareyregistry/hello-docker
+  -- Play with docker - labs.play-with-docker.com
+
+Hands On Excercises
+
 1. docker pull mysql/mysql-server:latest
 2. docker images ls
 3. docker run --name <container_name> -e MYSQL_ROOT_PASSWORD=<my-secret-pw> -d mysql/mysql-server:latest 
