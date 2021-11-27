@@ -59,6 +59,27 @@ volumes:
 
 19. docker-compose -f tooling.yaml  up -d 
 20. docker compose ls
+21. Kubernetes the hard way
+22. Deploy tools into kubernetes 
+    1.  https://gitlab.com/darey.io/pbl-expert/-/blob/master/projects/source/project22.md
+    2.  https://gitlab.com/darey.io/pbl-expert/-/blob/master/projects/source/project23.md (Helm)
+        1.  Deploy Jenkins 
+        2.  Artifactory
+        3.  Hashicorp Vault
+        4.  Prometheus
+        5.  Grafana
+        6.  Elasticsearch ELK using ECK
+        7.  Kubernetes key concepts
+            1.  Services - CLusterIP, NodeIP, Loadbalancer
+            2.  Difference between stateful and stateless apps
+            3.  Statesfull sets, Replicasets
+
+23.  You will write custom Helm charts
+24.  Configure Ingress for all the tools and applications running in the cluster
+25.  Integrate Secrets management using Hashicorp Vault
+26.  Integrate Logging with ELK
+27.  Inetegrate monitoring with Prometheus and Grafana
+28.  Learn Jenkins as code
 
 
 
