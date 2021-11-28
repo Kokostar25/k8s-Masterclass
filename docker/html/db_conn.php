@@ -2,7 +2,7 @@
 $servername = "mysqlserverhost";
 $username = "clientConnect";
 $password = "password@@@@@";
-$dbname = "toolingdb";
+$dbname = "toolingdb5";
 
 
 // Create connection
