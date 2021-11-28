@@ -1,5 +1,5 @@
 -- Docker is a platform for building, running and shipping applications 
--- Solves the problem - "It works on myy machine" - Due to - One or more files missing - Software dependency (node, mongo, nginx etc...) or Kernel version mismatch 
+-- Solves the problem - "It works on my machine" - Due to - One or more files missing - Software dependency (node, mongo, nginx etc...) or Kernel version mismatch 
 -- Runs the application inside an isolated environment called "Container" 
 -- A part of your application can run java 8 while another runs version 10 without messing with each other 
 -- If there is need to decommission a part of an application, we can easily do that without messing with the entire application 
@@ -26,7 +26,7 @@ Development Workflow
      2. A runtime environment (java, node) 
      3. Application files 
      4. Third-party libraries 
-     5. Environment variables2. 
+     5. Environment variables. 
    
 2. Push the image to a registry. Just like pushing your code to a git repository.
 3. Pull and Start a container using an image (Container is a special process running on the machine) 
@@ -38,6 +38,7 @@ Development Workflow
        - Copy app files 
        - Run the application file app.js 
             FROM node:alpine 
+            RUN mkdir /app
             COPY . /app 
             WORKDIR /app 
             CMD node app.js
@@ -55,16 +56,22 @@ Hands On Excercises
 
 1. docker pull mysql/mysql-server:latest
 2. docker images ls
-3. docker run --name <container_name> -e MYSQL_ROOT_PASSWORD=<my-secret-pw> -d mysql/mysql-server:latest 
+3. docker run --name mysql-server-container -e MYSQL_ROOT_PASSWORD=mysqlPassword -d mysql/mysql-server:8.0.27-aarch64
 4. docker ps -a
-5. docker exec -it <container_name> mysql -uroot -p
+5. docker exec -it mysql-server-container mysql -uroot -p
 6. docker network create --subnet=172.18.0.0/24 tooling_app_network 
-7. export MYSQL_PW=<root-secret-password>
-8. docker run --network tooling_app_network -h mysqlserverhost --name=mysql-server -e MYSQL_ROOT_PASSWORD=$MYSQL_PW  -d mysql/mysql-server:latest 
-9. cat CREATE USER '<user>'@'%' IDENTIFIED BY '<client-secret-password>';
-    GRANT ALL PRIVILEGES ON * . * TO '<user>'@'%'; >> ./create_user.sql
+7. export MYSQL_PW=mysqlPassword
+
+8.  docker run --network tooling_app_network -h mysqlserverhost --name=mysql-server -e MYSQL_ROOT_PASSWORD=$MYSQL_PW  -d mysql/mysql-server:latest 
+
+
+9.  echo "CREATE USER 'clientConnect'@'%' IDENTIFIED BY 'password@@@@@';
+    GRANT ALL PRIVILEGES ON * . * TO 'clientConnect'@'%';" >> ./create_user.sql
+
 
 10. docker exec -i mysql-server mysql -uroot -p$MYSQL_PW < ./create_user.sql
+
+
 11. docker run --network tooling_app_network --name mysql-client -it --rm mysql mysql -h mysqlserverhost -u <user-created-from-the-SQL-script> -p
 
 --name gives the container a name
@@ -112,10 +119,30 @@ volumes:
   tooling_frontend:
   db:
 
-19. docker-compose -f tooling.yaml  up -d 
-20. docker compose ls
-21. Kubernetes the hard way
-22. Deploy tools into kubernetes 
+Docker networking options 
+1. Default - Docker bridge 
+2. 
+
+3.  docker-compose -f tooling.yaml  up -d 
+4.  docker compose ls
+5.  Kubernetes Architecture
+    1.  A powerful yet very complex framework for running and orchestrating containerised application across multiple computers
+    2.  The entire setup consists of Master and Slave/Worker nodes to form a single cluster
+        1.  Master or Control: 
+          -- Scheduling the containers on the nodes in the cluster -- Identify the right nodes to run workload
+          -- Plans which of the workers is best suited to run the workload
+          -- Administering the containers, and the nodes running the containers. (Tracking information about them, where they are, what resources are they using...etc)
+          -- Uses different softwares to do all its work. Control plane components (Master node's Microservices)
+            1.  Controller
+            2.  Kube-Api-Server
+            3.  etcd Database (Key- Value store)
+            4.  Scheduler
+        1. Slaves/Workers: Running and monitoring the containers
+           1. Kubelet
+           2. Kube-proxy
+6.  Minikube
+7.  Kubernetes the hard way
+8.  Deploy tools into kubernetes 
     1.  https://gitlab.com/darey.io/pbl-expert/-/blob/master/projects/source/project22.md
     2.  https://gitlab.com/darey.io/pbl-expert/-/blob/master/projects/source/project23.md (Helm)
         1.  Deploy Jenkins 
@@ -129,12 +156,12 @@ volumes:
             2.  Difference between stateful and stateless apps
             3.  Statesfull sets, Replicasets
 
-23.  You will write custom Helm charts
-24.  Configure Ingress for all the tools and applications running in the cluster
-25.  Integrate Secrets management using Hashicorp Vault
-26.  Integrate Logging with ELK
-27.  Inetegrate monitoring with Prometheus and Grafana
-28.  Learn Jenkins as code
+9.   You will write custom Helm charts
+10.  Configure Ingress for all the tools and applications running in the cluster
+11.  Integrate Secrets management using Hashicorp Vault
+12.  Integrate Logging with ELK
+13.  Inetegrate monitoring with Prometheus and Grafana
+14.  Learn Jenkins as code
 
 
 
