@@ -27,9 +27,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `environments`
 --
 
-CREATE Database toolingdb5;
-
-Use toolingdb5;
+Use toolingdb;
 
 
 CREATE TABLE `environments` (

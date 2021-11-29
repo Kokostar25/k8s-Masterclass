@@ -93,7 +93,11 @@ $dbname = "toolingdb";
 15. docker build -t tooling:0.0.1 .
 16. docker run --network tooling_app_network -p 8085:80 -it tooling:0.0.1
 17. Home-Work https://github.com/darey-devops/php-todo
-18. Introduce Docker compose - Create a file, name it tooling.yaml
+18. Introduce Docker compose - Create a file, name it docker-compose.yaml
+
+-- Containerisation was designed for stateless applications 
+-- The opposite of stateless is stateful
+-- Containers are Ephemeral. They dont run for long, hence are prone to die from time to time
 
 version: "3.9"
 services:
@@ -119,13 +123,10 @@ volumes:
   tooling_frontend:
   db:
 
-Docker networking options 
-1. Default - Docker bridge 
-2. 
 
-3.  docker-compose -f tooling.yaml  up -d 
-4.  docker compose ls
-5.  Kubernetes Architecture
+1.  docker-compose -f docker-compose.yaml  up -d 
+2.  docker compose ls
+3.  Kubernetes Architecture
     1.  A powerful yet very complex framework for running and orchestrating containerised application across multiple computers
     2.  The entire setup consists of Master and Slave/Worker nodes to form a single cluster
         1.  Master or Control: 
@@ -133,16 +134,35 @@ Docker networking options
           -- Plans which of the workers is best suited to run the workload
           -- Administering the containers, and the nodes running the containers. (Tracking information about them, where they are, what resources are they using...etc)
           -- Uses different softwares to do all its work. Control plane components (Master node's Microservices)
-            1.  Controller
-            2.  Kube-Api-Server
-            3.  etcd Database (Key- Value store)
-            4.  Scheduler
-        1. Slaves/Workers: Running and monitoring the containers
+            1.  Scheduler
+                a.  Which worker node is adequate to handle a container based on the container's resource requirement and node's resource constraints?
+            2.  Controller-Manager
+                a.  Node-controller (Onboarding and decommissioning nodes in the cluster)
+                b.  Replication Controller (Desired number of containers are running at all times)
+            3.  Kube-Api-Server (Primary Management Component)
+                a.  Exposes the kubernetes API so that we can interact with Kubernetes. Like the entry point into the cluster
+                b.  Manages the entire communications between the various components in the cluster. Like the brain of a human, or CPU of a computer.
+                c.  The worker nodes communicates with the cluster through the kube-apiserver
+            4.  etcd Database (Key- Value store)
+        2. Slaves/Workers: Running and monitoring the containers
            1. Kubelet
+              a. Managing all activities on the worker node
+              b. Runs on all the worker nodes in the cluster
+              c. Listens for instructions from the kube-apiserver, and executes actions to either destroy or run containers on the server
+              d. The kube-apiserver periodically fetches status reports from the kubelets so as to know the status of the node and the containers running on it.
            2. Kube-proxy
-6.  Minikube
-7.  Kubernetes the hard way
-8.  Deploy tools into kubernetes 
+              a. Handles communication between containers running on the node and other nodes
+              b. ensures the necessary rules are configured to allow smooth communication to occur between containeers running across the different nodes
+           3. Container runtime engine (Docker, containerd, rocket, etc...)
+              1. The smallest unit of deployment in a kubernetes cluster is called a "Pod" Containers run inside it, and it is the docker runtime engine that kubernetes uses to run the containers. 
+              2. At the end of the day, Kubernetes is about Orchestration. Meaning, orchestrating how containers run across different nodes in such an organised and smooth manner.
+            
+
+
+4.  Minikube
+    1.  Deploy nginx app
+5.  Kubernetes the hard way
+6.  Deploy tools into kubernetes 
     1.  https://gitlab.com/darey.io/pbl-expert/-/blob/master/projects/source/project22.md
     2.  https://gitlab.com/darey.io/pbl-expert/-/blob/master/projects/source/project23.md (Helm)
         1.  Deploy Jenkins 
@@ -156,12 +176,12 @@ Docker networking options
             2.  Difference between stateful and stateless apps
             3.  Statesfull sets, Replicasets
 
-9.   You will write custom Helm charts
-10.  Configure Ingress for all the tools and applications running in the cluster
-11.  Integrate Secrets management using Hashicorp Vault
-12.  Integrate Logging with ELK
-13.  Inetegrate monitoring with Prometheus and Grafana
-14.  Learn Jenkins as code
+7.   You will write custom Helm charts
+8.   Configure Ingress for all the tools and applications running in the cluster
+9.   Integrate Secrets management using Hashicorp Vault
+10.  Integrate Logging with ELK
+11.  Inetegrate monitoring with Prometheus and Grafana
+12.  Learn Jenkins as code
 
 
 
