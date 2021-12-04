@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  tooling_frontend:
+    build: .
+    ports:
+      - "8085:80"
+    volumes:
+      - tooling_frontend:/var/www/html
+    links:
+      - db
+  db:
+    image: mysql/mysql-server:8.0-amd64
+    restart: always
+    environment:
+      MYSQL_DATABASE: toolingdb5
+      MYSQL_USER: clientConnect
+      MYSQL_PASSWORD: password@@@@@
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - db:/var/lib/mysql
+volumes:
+  tooling_frontend:
+  db:
