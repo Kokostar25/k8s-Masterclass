@@ -41,6 +41,7 @@ project/v6
 8. If condition
 9. Helm Rollback and forward
 10. deploy a public chart
+11. Clean up
 
 Home Work
 1. Deploy Tooling app with Helm - tooling-deployment.yaml
