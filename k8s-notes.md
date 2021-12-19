@@ -29,3 +29,17 @@ project/v5
 1. Simulate Statelessness in Kubernetes 
 2. Make deployments stateful with configmap
    -- Kubernetes has another API object that has more advanced usage of statefulness for stateful applications like databases - Statefulsets
+
+project/v6
+1. Introduce Helm 
+2. helm installation 
+3. helm create nginx
+4. Deploy all yaml files with "Helm Install"
+5. Helm Upgrade
+6. Rolling update in action
+7. Introduce Values 
+8. If condition
+9. Helm Rollback and forward
+
+Home Work
+1. Deploy Tooling app with Helm - tooling-deployment.yaml
