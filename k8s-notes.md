@@ -1,9 +1,10 @@
 1. Updated architecture of AWS infrastructure
-2. understand pods-deployments-services
+2. understand pods --> replicasets --> deployments --> services
 3. Other kubernetes concepts
-   1. configmap
-   2. secret
-   3. persistent volumes and persistent volume claims
+   1. statelessness of kubernetes
+   2. configmap
+   3. secret
+   4. persistent volumes and persistent volume claims
 4. Templating kubernetes manifest files with Helm
 5. Deploying tools into kubernetes with Helm
    1. Jenkins
