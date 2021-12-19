@@ -383,7 +383,6 @@ and Helm will make sure all the required resources are installed. In addition yo
 
 Behind the scenes, a helm chart is essentially a bunch of YAML manifests that define all the resources required by the application. Helm takes care of creating the resources in Kubernetes (where they don't exist) and removing old resources.
 
-#### Lets begin to gradually walk through how to use Helm (Credit - https://andrewlock.net/series/deploying-asp-net-core-applications-to-kubernetes/) @igor please update the texts as much as possible to reduce plagiarism
 
 1. Parameterising YAML manifests using Helm templates
 
