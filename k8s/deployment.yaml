@@ -1,0 +1,40 @@
+# Section 1 - This is the part that defines the deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    tier: frontend
+
+# Section 2 - This is the Replica set layer controlled by the deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: frontend
+
+# Section 3 - This is the Pod section controlled by the deployment and selected by the replica set in section 2.
+  template:
+    metadata:
+      labels:
+        tier: frontend
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: config
+          mountPath: "/usr/share/nginx/html"
+          readOnly: true 
+      volumes:
+        # You set volumes at the Pod level, then mount them into containers inside that Pod
+        - name: config
+          configMap:
+            # Provide the name of the ConfigMap you want to mount.
+            name: nginx-config
+            # An array of keys from the ConfigMap to create as files
+            items:
+            - key: "index.html"
+              path: "index.html"

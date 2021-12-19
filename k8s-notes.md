@@ -21,3 +21,11 @@
    2. Prometheus
    3. Grafana
    
+
+
+Branch Changes 
+
+project/v5
+1. Simulate Statelessness in Kubernetes 
+2. Make deployments stateful with configmap
+   -- Kubernetes has another API object that has more advanced usage of statefulness for stateful applications like databases - Statefulsets
