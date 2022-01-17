@@ -183,7 +183,158 @@ volumes:
 11.  Inetegrate monitoring with Prometheus and Grafana
 12.  Learn Jenkins as code
 
+Branch 'Project/v7'
+
+1. Deploy Jenkins
+    -- helm repo add jenkins https://charts.jenkins.io
+    -- helm repo update 
+    -- helm install jenkins jenkins/jenkins
+
+2. Deploy Artifactory 
+   -- helm repo add jfrog https://charts.jfrog.io
+  - helm repo update
 
 
+- Upgrade with the PostgreSQL Password 
+  Get the postgresSQL Passsword 
+
+  POSTGRES_PASSWORD=$(kubectl get secret -n default artifactory-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+  
+  Perform the upgrade below 
+  helm upgrade artifactory jfrog/artifactory --set postgresql.postgresqlPassword=${POSTGRES_PASSWORD} --namespace default --set databaseUpgradeReady=true
+
+- Remove the loadbalancer and Use Ingress instead
+helm upgrade artifactory jfrog/artifactory --set postgresql.postgresqlPassword=${POSTGRES_PASSWORD} --namespace default --set databaseUpgradeReady=true \
+        --set nginx.service.type=clusterIP
+
+1. Deploy Ingress Controller 
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm install nginx-ingress bitnami/nginx-ingress-controller
+
+4 Deploy Ingress for Artifactory
+
+5. Configure TLS
+
+-- Create certificates (Resource https://www.digitalocean.com/community/tutorials/openssl-essentials-working-with-ssl-certificates-private-keys-and-csrs)
+-- Create TLS secret of TLS type
+
+6. Jenkins pipleine for Tooling docker image 
+
+7. Helm for Tooling app 
+   -- Mysql 
+   helm install mysql bitnami/mysql
+   - Configure the database and user for the application 
+  echo CREATE USER 'clientConnect'@'%' IDENTIFIED BY 'password@@@@@';
+    GRANT ALL PRIVILEGES ON * . * TO 'clientConnect'@'%';
+
+  Image pull secret
+
+  kubectl create secret docker-registry dockercred \
+  --docker-username=<your-name> \
+  --docker-password=<your-pword> \
+
+8. Implement CICD for the business Application (Docker image)
+9. Implement CICD for Helm 
+10. Implement secrets management using HAshicorp Vault
+
+
+Home work 
+-- Configure Artifactory as a docker repository 
+
+docker tag 
+
+docker pull / push docker-repo.artifactory.tooling.devops-masterclass.link/tooling:0.0.1
+docker login -u <USER_NAME> -p <USER_PASSWORD> docker-repo.artifactory.tooling.devops-masterclass.link
+
+-- Implement CICD for more applications
+
+1. Implement CICD for Tooling app 
+   1. PHP application 
+   2. Depends on a MySQL backend database 
+
+-- Build the docker image and push to a private repository in Artifactory 
+-- Build Helm chart to deploy the applications (MySQL and Tooling)
+-- Promote to different environments
+
+
+
+docker login artifactory.tooling.devops-masterclass.link
+docker tag <IMAGE_ID> artprod.mycompany/<DOCKER_REPOSITORY>:<DOCKER_TAG>
+
+docker push artprod.mycompany/<DOCKER_REPOSITORY>:<DOCKER_TAG>
+
+
+Other supporting tasks ......
+
+7. Access from port forwarding
+8. Deploy Ingress controller
+9.  Deploy Ingress resource 
+10. Create Route53 records to access the service
+11. Access Jenkins from URL
+12. Configure Jenkins for HTTPS
+   1. Deploy Cert-manager -- https://cert-manager.io/docs/installation/helm/ or https://artifacthub.io/packages/helm/cert-manager/cert-manager
+   -- helm repo add jetstack https://charts.jetstack.io
+   -- helm repo update
+   -- helm install \
+        cert-manager jetstack/cert-manager \
+        --namespace cert-manager \
+        --create-namespace \
+        --version v1.6.1 \
+        --set installCRDs=true
+   1. deploy issuer
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  namespace: "cert-manager"
+  name: "letsencrypt-production"
+spec:
+  acme:
+    # The ACME server URL
+    server: "https://acme-v02.api.letsencrypt.org/directory"
+    email: "dare@darey.io"
+    # Name of a secret used to store the ACME account private key
+    privateKeySecretRef:
+      name: "letsencrypt-production"
+    solvers:
+    - selector:
+        dnsZones:
+          - "svc.steghub.com"
+      dns01:
+        route53:
+          region: "eu-west-2"
+          hostedZoneID: "Z07778562K055K5DQB0TI"
+
+  -- Troubelshooting
+    -- get certificate
+    -- get certificaterequest
+    -- get order
+    -- get challenge
+        Review the challenge in Route53 console 
+
+   1. Add annotations to ingress
+   2. Access the service on https
+1. Deploy other tools
+   1. Artifactory
+   2. Grafana
+   3. Prometheus
+   4. Vault in single and HA mode using consul - Configure auto unseal with AWS KMS
+
+2.  Deploy Tooling app with Helm
+3.  Create CICD for tooling app images - Jenkinsfile for dockerimage - Deployment into different environments (Namespaces)
+4.  Jenkins Job for Helm deployment -  Deployment into different environments (Namespaces)
+5.  Introduce GitOps with FluxCD
+    1.  auto deploy docker images on push
+    2.  auto update helm releases
+6.  Monitoring the infrastructure
+7.  Logging infrastructure
+
+Advanced Kubernetes concepts
+
+1. Pod Distruption budgets
+2. Affinitis
+3. Node Selectors
+
+Interview Prep
+Job Search
 
 
